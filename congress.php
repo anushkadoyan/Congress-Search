@@ -154,7 +154,26 @@ YOUR_API_KEY_HERE
 					document.getElementById("con-select").value="<?php echo $_POST['selectOption']?>";</script>
 					<?php
 				}
-				if(isset($_POST['formSubmit']) && $_POST['keyword-title'] && $_POST['keyword']) {
+				
+				
+				
+				//if search is clicked
+				if(isset($_POST['formSubmit']) && $_POST['keyword-title'] && $_POST['keyword'] && $_POST['selectOption']!="default") {
+					echo "asdf";			
+					if($_POST['selectOption']=="Legislators") {
+						
+					}
+					else if ($_POST['selectOption']=="Committees") {
+						
+					}
+					else if ($_POST['selectOption']=="Bills") {
+						
+					}
+					else if ($_POST['selectOption']=="Amendments") {
+						
+					}
+					
+					
 					$url = "https://congress.api.sunlightfoundation.com/votes?fields=roll_id,result,breakdown.total&apikey=9d713eee2bda4febb053035ef76e5f4c";
 					$fields ="";
 					echo request($url, $fields);
