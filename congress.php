@@ -13,9 +13,16 @@
 	<!--     API Key: 9d713eee2bda4febb053035ef76e5f4c 
 		https://congress.api.sunlightfoundation.com/[method]
 		/legislators?apikey=[your_api_key]
+		
+		https://congress.api.sunlightfoundation.com/legislators?
+chamber=
+house
+&state=
+WA
+&apikey=
+YOUR_API_KEY_HERE
 	-->
 		<script>
-
 		function selectChange() {
 			var keySelect = document.getElementById("keyword-title");
 			var opt = document.getElementById("con-select").value;
@@ -68,6 +75,8 @@
 				}
 				alert(text);
 			}
+			
+
 		}
 	</script>
 	<body>
@@ -145,8 +154,40 @@
 					document.getElementById("con-select").value="<?php echo $_POST['selectOption']?>";</script>
 					<?php
 				}
+				if(isset($_POST['formSubmit']) && $_POST['keyword-title'] && $_POST['keyword']) {
+					$url = "https://congress.api.sunlightfoundation.com/votes?fields=roll_id,result,breakdown.total&apikey=9d713eee2bda4febb053035ef76e5f4c";
+					$fields ="";
+					echo request($url, $fields);
+				}
 				
-							
+				
+				
+				
+				
+				function request($url, $fields) {
+					//url-ify the data for the POST
+		/*
+					foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+					rtrim($fields_string, '&');
+					
+		*/
+					//open connection
+					$ch = curl_init();
+					
+					//set the url, number of POST vars, POST data
+					curl_setopt($ch,CURLOPT_URL, $url);
+		// 			curl_setopt($ch,CURLOPT_POST, count($fields));
+		// 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+					
+					//execute post
+					$result = curl_exec($ch);
+					
+					//close connection
+					curl_close($ch);
+					return $result;
+	
+				}
+																	
 				
 				foreach ($_POST as $key => $value)
  echo "Field ".htmlspecialchars($key)." is ".htmlspecialchars($value)."<br>";
