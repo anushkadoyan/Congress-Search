@@ -50,7 +50,9 @@ YOUR_API_KEY_HERE
 			
 			var keySelect = document.getElementById("keyword-title");
 			var keyInput = document.getElementById("keyword-input");
-
+			var infoTable = document.getElementById("infoTable");
+			
+			infoTable.innerHTML = "";
 			keySelect.innerHTML = "Keyword*";
 			keyInput.value = "";
 
@@ -184,7 +186,16 @@ YOUR_API_KEY_HERE
 					document.getElementById("con-select").value="<?php echo $_POST['selectOption']?>";</script>
 					<?php
 				}
+				?>
+				<script>
+				function detailClick() {
+					return false;
+					document.getElementById("infoTable").innerHTML="";
+					
+				}
 				
+				</script>
+				<?php
 				
 				
 				//if search is clicked
@@ -203,7 +214,7 @@ YOUR_API_KEY_HERE
 							$text= $text. "<tr><td>".$name."</td>";
 							$text= $text. "<td>".$value["state_name"]."</td>";
 							$text= $text. "<td>".$value["chamber"]."</td>";
-							$text= $text. "<td><a href='".$value["bioguide_id"]."'>View Details</a></td></tr>";
+							$text= $text. "<td><a onclick='return detailClick()' href='".$value["bioguide_id"]."'>View Details</a></td></tr>";
 							
 						}		
 						$text= $text."</tbody></table>";
