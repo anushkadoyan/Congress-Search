@@ -133,6 +133,13 @@ YOUR_API_KEY_HERE
 			padding: 5px;
 		}
 		
+		#fcontainer {
+			padding-bottom: 50px;
+		}
+		
+		#infoTable td {
+			padding: 0px 50px;
+		}
 		
 	</style>
 	
@@ -190,22 +197,14 @@ YOUR_API_KEY_HERE
 						$jsonobj = request($url);
 						$json = $jsonobj["results"];
 	// 					print_r( $json);
-						$text = "<table id='infoTable' style='margin: auto; padding: 40px;'><tbody><tr><th>Name</th><th>State</th><th>Chamber</th></tr>";
+						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Name</th><th>State</th><th>Chamber</th><th>Details</th></tr>";
 						foreach ($json as $key => $value) {
 							$name = $value["first_name"]." ".$value["middle_name"]." ".$value["last_name"];
 							$text= $text. "<tr><td>".$name."</td>";
 							$text= $text. "<td>".$value["state_name"]."</td>";
-							$text= $text. "<td>".$value["chamber"]."</td></tr>";
-
-							?>
+							$text= $text. "<td>".$value["chamber"]."</td>";
+							$text= $text. "<td><a href='".$value["bioguide_id"]."'>View Details</a></td></tr>";
 							
-						
-						
-							<?php
-	/*
-							echo($name);
-							echo "===============";
-	*/
 						}		
 						$text= $text."</tbody></table>";
 						echo $text;
