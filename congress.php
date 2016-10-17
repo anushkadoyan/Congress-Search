@@ -51,8 +51,14 @@ YOUR_API_KEY_HERE
 			var keySelect = document.getElementById("keyword-title");
 			var keyInput = document.getElementById("keyword-input");
 			var infoTable = document.getElementById("infoTable");
-			
-			infoTable.innerHTML = "";
+			var detailTable = document.getElementById("details-show");
+			if(infoTable) {
+				infoTable.innerHTML = "";
+
+			}
+			if(detailTable) {
+			detailTable.innerHTML = "";
+			}
 			keySelect.innerHTML = "Keyword*";
 			keyInput.value = "";
 
@@ -136,13 +142,22 @@ YOUR_API_KEY_HERE
 		}
 		
 		#fcontainer {
-			padding-bottom: 50px;
+			padding-bottom: 30px;
 		}
 		
 		#infoTable td {
 			padding: 0px 50px;
 		}
-		
+		.detail {
+			text-align: center;
+			width: 900px;
+			margin: 0 auto;
+			padding: 20px;
+			border: 1px solid;
+		}
+		.detail td {
+			min-width: 200px;
+		}
 	</style>
 	
 	
@@ -188,9 +203,19 @@ YOUR_API_KEY_HERE
 				}
 				?>
 				<script>
-				function detailClick() {
-					return false;
+				
+/*
+				document.getElementById("nodeGoto").addEventListener("click", function() {
+				    gotoNode(result.name);
+				}, false);
+*/
+
+				function detailClick(id) {
 					document.getElementById("infoTable").innerHTML="";
+					document.getElementById(id).style.display="block";
+					
+					return false;
+					
 					
 				}
 				
@@ -209,14 +234,40 @@ YOUR_API_KEY_HERE
 						$json = $jsonobj["results"];
 	// 					print_r( $json);
 						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Name</th><th>State</th><th>Chamber</th><th>Details</th></tr>";
+						$details ="<div id='details-show'>";
 						foreach ($json as $key => $value) {
 							$name = $value["first_name"]." ".$value["middle_name"]." ".$value["last_name"];
 							$text= $text. "<tr><td>".$name."</td>";
 							$text= $text. "<td>".$value["state_name"]."</td>";
 							$text= $text. "<td>".$value["chamber"]."</td>";
-							$text= $text. "<td><a onclick='return detailClick()' href='".$value["bioguide_id"]."'>View Details</a></td></tr>";
+							$text= $text. "<td><a onclick='return detailClick(\"".$value["first_name"]."_".$value["last_name"]."\")' href='".$value["bioguide_id"]."'>View Details</a></td></tr>";
+							echo #$
+							$twitter ="";
+							$fb = "";
+							$website="";
+							if(isset($value["twitter_id"])) {
+								$twitter = "<a target='_blank' href='https://twitter.com/".$value["twitter_id"]."'>".$name."</a>";
+							} else {	
+								$twitter = "N/A";
+							}
+							if(isset($value["facebook_id"])) {
+								$fb = "<a target = '_blank' href='https://facebook.com/".$value["facebook_id"]."'>".$name."</a>";
+							} else {
+								$fb = "N/A";
+							}
+							if(isset($value["website"])) {
+								$website = "<a target = '_blank' href='".$value["website"]."'>".$value["website"]."</a>";
+							} else {
+								$website = "N/A";
+							}
 							
-						}		
+							$details = $details."<div class='detail' style='display: none;' id='".$value["first_name"]."_".$value["last_name"]."'>";
+							$details = $details."<img src='https://theunitedstates.io/images/congress/225x275/".$value["bioguide_id"].".jpg'>";
+							$details = $details."<table style='margin: 0 auto; padding-top: 30px;'><tbody><tr><td>Full Name</td><td>".$value["title"]." ".$name."</td></tr><tr><td>Term Ends on</td><td>".$value["term_end"]."</td></tr><tr><td>Website</td><td>".$website."</td></tr><tr><td>Office</td><td>".$value["office"]."</td></tr><tr><td>Facebook</td><td>".$fb."</td></tr><tr><td>Twitter</td><td>".$twitter."</td></tr></tbody></table></div>";
+							
+						}
+						$details = $details."</div>";
+						echo $details;		
 						$text= $text."</tbody></table>";
 						echo $text;
 						?>				
