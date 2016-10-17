@@ -2,6 +2,7 @@
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
+	$apiKey ="9d713eee2bda4febb053035ef76e5f4c";
 ?>
 
 <html>
@@ -117,9 +118,30 @@ YOUR_API_KEY_HERE
 				</form> 
 			</div>
 		</div>	
+	</body>
+			
+	<style>
+		[id$=selection] {
+			text-align: center;
+		}
+		#form-block {
+			display: inline-block;
+			border: 1px solid black;
+		}
+		#fcontainer div {
+			padding: 5px;
+		}
 		
 		
-		<div>
+	</style>
+	
+	
+
+	
+		
+	
+</html>
+
 			<?php
 				//data persists after form submit
 				if(isset($_POST['keyword'])) {	
@@ -159,8 +181,22 @@ YOUR_API_KEY_HERE
 				
 				//if search is clicked
 				if(isset($_POST['formSubmit']) && $_POST['keyword-title'] && $_POST['keyword'] && $_POST['selectOption']!="default") {
-					echo "asdf";			
+					$senateOrHouse = strtolower($_POST['Senate_House']);	
+					$state = $_POST['keyword'];
 					if($_POST['selectOption']=="Legislators") {
+						
+						$url = "https://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&state=".$state."&apikey=".$apiKey;
+					$jsonobj = request($url);
+					$json = $jsonobj["results"];
+// 					print_r( $json);
+					foreach ($json as $key => $value) {
+						$name = $value["first_name"]." ".$value["middle_name"]." ".$value["last_name"];
+
+						echo($name);
+						echo "===============";
+					}						
+						
+						
 						
 					}
 					else if ($_POST['selectOption']=="Committees") {
@@ -172,70 +208,39 @@ YOUR_API_KEY_HERE
 					else if ($_POST['selectOption']=="Amendments") {
 						
 					}
+/*
 					
-					
+					https://congress.api.sunlightfoundation.com/legislators?
+chamber=
+house
+&state=
+WA
+&apikey=
+YOUR_API_KEY_HERE
 					$url = "https://congress.api.sunlightfoundation.com/votes?fields=roll_id,result,breakdown.total&apikey=9d713eee2bda4febb053035ef76e5f4c";
-					$fields ="";
-					echo request($url, $fields);
+*/
+					
 				}
 				
 				
 				
 				
 				
-				function request($url, $fields) {
-					//url-ify the data for the POST
-		/*
-					foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-					rtrim($fields_string, '&');
-					
-		*/
-					//open connection
-					$ch = curl_init();
-					
-					//set the url, number of POST vars, POST data
-					curl_setopt($ch,CURLOPT_URL, $url);
-		// 			curl_setopt($ch,CURLOPT_POST, count($fields));
-		// 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-					
-					//execute post
-					$result = curl_exec($ch);
-					
-					//close connection
-					curl_close($ch);
-					return $result;
-	
+				function request($url) {
+					$response = "";
+					$jsonobj="";
+					$response = file_get_contents($url);
+					$jsonobj=json_decode($response,true);
+					return $jsonobj;
 				}
 																	
 				
+/*
 				foreach ($_POST as $key => $value)
  echo "Field ".htmlspecialchars($key)." is ".htmlspecialchars($value)."<br>";
+*/
 			?>
-		</div>
-		
-	</body>
-	
-	
-	
-	
-	<style>
-		[id$=selection] {
-			text-align: center;
-		}
-		#form-block {
-			display: inline-block;
-			border: 1px solid black;
-		}
-		#fcontainer div {
-			padding: 5px;
-		}
-		
-		
-	</style>
-	
-	
-
-	
 		
 	
-</html>
+	
+	
