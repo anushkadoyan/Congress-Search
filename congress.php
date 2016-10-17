@@ -118,6 +118,7 @@ YOUR_API_KEY_HERE
 				</form> 
 			</div>
 		</div>	
+		<div id="info"></div>
 	</body>
 			
 	<style>
@@ -186,18 +187,32 @@ YOUR_API_KEY_HERE
 					if($_POST['selectOption']=="Legislators") {
 						
 						$url = "https://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&state=".$state."&apikey=".$apiKey;
-					$jsonobj = request($url);
-					$json = $jsonobj["results"];
-// 					print_r( $json);
-					foreach ($json as $key => $value) {
-						$name = $value["first_name"]." ".$value["middle_name"]." ".$value["last_name"];
+						$jsonobj = request($url);
+						$json = $jsonobj["results"];
+	// 					print_r( $json);
+						$text = "<table id='infoTable' style='margin: auto; padding: 40px;'><tbody><tr><th>Name</th><th>State</th><th>Chamber</th></tr>";
+						foreach ($json as $key => $value) {
+							$name = $value["first_name"]." ".$value["middle_name"]." ".$value["last_name"];
+							$text= $text. "<tr><td>".$name."</td>";
+							$text= $text. "<td>".$value["state_name"]."</td>";
+							$text= $text. "<td>".$value["chamber"]."</td></tr>";
 
-						echo($name);
-						echo "===============";
-					}						
+							?>
+							
 						
 						
+							<?php
+	/*
+							echo($name);
+							echo "===============";
+	*/
+						}		
+						$text= $text."</tbody></table>";
+						echo $text;
+						?>				
+							
 						
+					<?php	
 					}
 					else if ($_POST['selectOption']=="Committees") {
 						
