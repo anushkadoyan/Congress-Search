@@ -12,16 +12,7 @@
 	</head>
 	
 	<!--     API Key: 9d713eee2bda4febb053035ef76e5f4c 
-		https://congress.api.sunlightfoundation.com/[method]
-		/legislators?apikey=[your_api_key]
-		
-		https://congress.api.sunlightfoundation.com/legislators?
-chamber=
-house
-&state=
-WA
-&apikey=
-YOUR_API_KEY_HERE
+
 	-->
 		<script>
 		function selectChange() {
@@ -234,9 +225,9 @@ YOUR_API_KEY_HERE
 						//if searched state is full state name instead of two letter
 						if (array_key_exists(ucfirst($state), $states)) {
 						    $state= $states[ucfirst($state)];
-							$url = "https://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&state=".$state."&apikey=".$apiKey;
+							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&state=".$state."&apikey=".$apiKey;
 						} else {
-							$url = "https://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&query=".$state."&apikey=".$apiKey;
+							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&query=".$state."&apikey=".$apiKey;
 						}
 						$jsonobj = request($url);
 						$json = $jsonobj["results"];
@@ -246,7 +237,7 @@ YOUR_API_KEY_HERE
 						foreach ($json as $key => $value) {
 							$name = $value["first_name"]." ".$value["middle_name"]." ".$value["last_name"];
 							$text= $text. "<tr><td>".$name."</td>";
-							$text= $text. "<td>".$value["state_name"]."</td>";
+							$text= $text. "<td style='text-align: center;'>".$value["state_name"]."</td>";
 							$text= $text. "<td>".$value["chamber"]."</td>";
 							$text= $text. "<td><a onclick='return detailClick(\"".$value["first_name"]."_".$value["last_name"]."\")' href='".$value["bioguide_id"]."'>View Details</a></td></tr>";
 							echo #$
