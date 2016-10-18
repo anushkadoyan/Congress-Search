@@ -236,7 +236,6 @@
 						if (array_key_exists(ucwords(strtolower($state)), $states)) {
 						    $state= $states[ucwords(strtolower($state))];
 							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&state=".$state."&apikey=".$apiKey;
-							echo $url;
 						} 
 						else if ($nameLength>1) {
 							$lastName = ucfirst(strtolower($name[1]));
@@ -303,22 +302,27 @@
 					
 					//if Committees chosen
 					else if ($_POST['selectOption']=="Committees") {
-						$url = "http://congress.api.sunlightfoundation.com/committees?committee_id=".$state."chamber=".$senateOrHouse."&apikey=".$apiKey;
+						$state = strtoupper($state);
+						$url = "http://congress.api.sunlightfoundation.com/committees?committee_id=".$state."&chamber=".$senateOrHouse."&apikey=".$apiKey;
 						$jsonobj = request($url);
 						$json = $jsonobj["results"];
 						
 	// 					print_r( $json);
-						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Name</th><th>State</th><th>Chamber</th><th>Details</th></tr>";
+						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Committee ID</th><th>Committee Name</th><th>Chamber</th></tr>";
 						$details ="<div id='details-show'>";
 						if(!$json){
-							$details = $details. "The API returned zero results for the request.</div>";
+							$details = $details."The API returned zero results for the request.</div>";
 							echo $details;
 							return;
-
 						}
-// 						foreach ($json as $key => $value) {
+						foreach ($json as $key => $value) {
+							$text = $text."<tr><td>".$value["committee_id"]."</td>";
+							$text = $text.    "<td>".$value["name"]."</td>";
+							$text = $text.    "<td>".$value["chamber"]."</td></tr>";
+						}
 							
-						
+						$text= $text."</tbody></table>";
+						echo $text;
 						
 						
 					}
@@ -326,11 +330,33 @@
 					
 					//if Bills chosen
 					else if ($_POST['selectOption']=="Bills") {
-						
+												
 					}
 					
 					//if Amendments chosen
 					else if ($_POST['selectOption']=="Amendments") {
+						$state = strtolower($state);
+						$url = "http://congress.api.sunlightfoundation.com/amendments?amendment_id=".$state."&chamber=".$senateOrHouse."&apikey=".$apiKey;
+						$jsonobj = request($url);
+						$json = $jsonobj["results"];
+						
+	// 					print_r( $json);
+						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Amendment ID</th><th>Amendment Type</th><th>Chamber</th><th>Introduced on</th></tr>";
+						$details ="<div id='details-show'>";
+						if(!$json){
+							$details = $details."The API returned zero results for the request.</div>";
+							echo $details;
+							return;
+						}
+						foreach ($json as $key => $value) {
+							$text = $text."<tr><td>".$value["amendment_id"]."</td>";
+							$text = $text.    "<td>".$value["amendment_type"]."</td>";
+							$text = $text.    "<td>".$value["chamber"]."</td>";
+							$text = $text.    "<td>".$value["introduced_on"]."</td></tr>";
+						}
+							
+						$text= $text."</tbody></table>";
+						echo $text;
 						
 					}
 /*
