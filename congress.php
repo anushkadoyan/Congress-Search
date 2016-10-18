@@ -18,7 +18,7 @@
 		function selectChange() {
 			var keySelect = document.getElementById("keyword-title");
 			var opt = document.getElementById("con-select").value;
-
+			console.log(opt);
 			var keyTitle = document.getElementById("secret").value;
 			switch(opt) {
 			    case "Legislators":
@@ -35,7 +35,7 @@
 			        break;   
 			}
 			document.getElementById("secret").value = keySelect.innerHTML;
-
+			
 		}
 		function clearClicked() {
 			
@@ -43,6 +43,8 @@
 			var keyInput = document.getElementById("keyword-input");
 			var infoTable = document.getElementById("infoTable");
 			var detailTable = document.getElementById("details-show");
+			var select = document.getElementById("con-select");
+			select.value="default";
 			if(infoTable) {
 				infoTable.innerHTML = "";
 
@@ -53,8 +55,25 @@
 			keySelect.innerHTML = "Keyword*";
 			keyInput.value = "";
 
+/*
 			document.getElementById("senateRadio").checked = "true";
 			document.getElementById("houseRadio").checked = "false";
+*/
+			var ele = document.getElementById("myForm");
+		    tags = ele.getElementsByTagName('input');
+		    for(i = 0; i < tags.length; i++) {
+		        switch(tags[i].type) {
+		            case 'password':
+		            case 'text':
+		                tags[i].value = '';
+		                break;
+		            case 'checkbox':
+		            case 'radio':
+		                tags[i].checked = false;
+		                break;
+		        }
+		    }
+		    			document.getElementById("senateRadio").checked = "true";
 		}
 		
 		function searchClicked() {
@@ -98,7 +117,7 @@
 					<div id="chamber-selection">
 						<div style="display: inline-block;" id="chamber-title">Chamber</div>
 						<div id="sen_house-radios" style="display: inline-block">
-							<input type="radio" id="senateRadio" name="Senate_House" value = "Senate" <?php if(isset($_POST['Senate_House'])&&$_POST['Senate_House']=="Senate") echo "checked='checked'"; ?>checked="checked" > Senate
+							<input type="radio" id="senateRadio" name="Senate_House" value = "Senate" <?php if(isset($_POST['Senate_House'])&&$_POST['Senate_House']=="Senate") echo "checked='checked'"; if (!isset($_POST['Senate_House'])) echo "checked='checked'"?> > Senate
 							<input type="radio" id="houseRadio" name="Senate_House" value = "House" <?php if(isset($_POST['Senate_House'])&&$_POST['Senate_House']=="House") echo "checked='checked'"; ?>  >House <br>
 						</div>
 					</div>
@@ -110,7 +129,7 @@
 					<div id="search-clear" style="width: 100%;">
 						<input type="submit" form="myForm" value="Search" onclick="searchClicked()" name="formSubmit" >
 										
-						<button form="myForm" type="reset" value="Clear" onclick="clearClicked()">Clear</button> 				
+						<input form="myForm" type="button" value="Clear" onclick="clearClicked()">			
 					</div>
 					<div>
 						<a href="http://sunlightfoundation.com/" target="_blank">Powered by Sunlight Foundation</a>
@@ -196,17 +215,36 @@
 					<?php
 				}
 
+/*
 				if(isset($_POST['Senate_House'])) {	
 					?>
 					<script>
 					document.getElementsByName("Senate_House").value = "<?php echo $_POST['Senate_House'];?>";</script>
 					<?php
 				}
+*/
 				if(isset($_POST['selectOption'])) {
 					$select = $_POST['selectOption'];
 					?>
 					
 					<script>
+					var keySelect = document.getElementById("keyword-title");
+					switch("<?php echo $select ?>") {
+						
+					    case "Legislators":
+							keySelect.innerHTML = "State/Representative*";
+					        break;
+					    case "Committees":
+							keySelect.innerHTML = "Committee ID*";
+					        break;
+					    case "Bills":
+							keySelect.innerHTML = "Bill ID*";
+					        break;
+					    case "Amendments":
+							keySelect.innerHTML = "Amendments ID*";
+					        break;   
+			}
+	
 					document.getElementById("con-select").value="<?php echo $_POST['selectOption']?>";</script>
 					<?php
 				}
@@ -233,7 +271,7 @@
 				
 				
 				//if search is clicked
-				if(isset($_POST['formSubmit']) && $_POST['keyword-title'] && $_POST['keyword'] && $_POST['selectOption']!="default") {
+				if(isset($_POST['formSubmit']) && $_POST['Senate_House'] && $_POST['keyword'] && $_POST['selectOption']!="default") {
 					$senateOrHouse = strtolower($_POST['Senate_House']);	
 					$state = trim($_POST['keyword']);
 					$name = explode(" ", $state);
@@ -438,8 +476,10 @@ YOUR_API_KEY_HERE
 				}
 																	
 				
+/*
 				foreach ($_POST as $key => $value)
  echo "Field ".htmlspecialchars($key)." is ".htmlspecialchars($value)."<br>";
+*/
 			?>
 		
 	
