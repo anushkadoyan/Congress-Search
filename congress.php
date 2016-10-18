@@ -271,7 +271,7 @@
 				
 				
 				//if search is clicked
-				if(isset($_POST['formSubmit']) && $_POST['Senate_House'] && $_POST['keyword'] && $_POST['selectOption']!="default") {
+				if(isset($_POST['formSubmit']) && $_POST['Senate_House'] && $_POST['keyword'] && isset($_POST['selectOption']) && $_POST['selectOption']!="default") {
 					$senateOrHouse = strtolower($_POST['Senate_House']);	
 					$state = trim($_POST['keyword']);
 					$name = explode(" ", $state);
