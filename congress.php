@@ -149,6 +149,9 @@
 		.detail td {
 			min-width: 200px;
 		}
+		#details-show {
+			text-align: center;
+		}
 	</style>
 	
 	
@@ -231,10 +234,18 @@
 						}
 						$jsonobj = request($url);
 						$json = $jsonobj["results"];
+
 	// 					print_r( $json);
 						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Name</th><th>State</th><th>Chamber</th><th>Details</th></tr>";
 						$details ="<div id='details-show'>";
+						if(!$json){
+							$details = $details. "The API returned zero results for the request.</div>";
+							echo $details;
+							return;
+
+						}
 						foreach ($json as $key => $value) {
+							
 							$name = $value["first_name"]." ".$value["middle_name"]." ".$value["last_name"];
 							$text= $text. "<tr><td>".$name."</td>";
 							$text= $text. "<td style='text-align: center;'>".$value["state_name"]."</td>";
