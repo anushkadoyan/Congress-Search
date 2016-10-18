@@ -221,6 +221,9 @@
 				if(isset($_POST['formSubmit']) && $_POST['keyword-title'] && $_POST['keyword'] && $_POST['selectOption']!="default") {
 					$senateOrHouse = strtolower($_POST['Senate_House']);	
 					$state = trim($_POST['keyword']);
+					$name = explode(" ", $state);
+					$nameLength = count($name);
+					$lastName="";
 					if($_POST['selectOption']=="Legislators") {
 						
 						//all states
@@ -229,7 +232,18 @@
 						if (array_key_exists(ucfirst(strtolower($state)), $states)) {
 						    $state= $states[ucfirst(strtolower($state))];
 							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&state=".$state."&apikey=".$apiKey;
-						} else {
+						} 
+						else if ($nameLength>1) {
+							echo "jfkhjgf";
+							$lastName = ucfirst(strtolower($name[1]));
+							if(substr($lastName, 0, 2)=="Mc") {
+								$lastName[2] = strtoupper($lastName[2]);
+								echo $lastName[2];
+							}
+							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&first_name=".ucfirst(strtolower($name[0]))."&last_name=".$lastName."&apikey=9d713eee2bda4febb053035ef76e5f4c";
+							echo $url;
+						}
+						else {
 							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&query=".$state."&apikey=".$apiKey;
 						}
 						$jsonobj = request($url);
@@ -315,8 +329,11 @@ YOUR_API_KEY_HERE
 				function request($url) {
 					$response = "";
 					$jsonobj="";
-					$response = file_get_contents($url);
-					$jsonobj=json_decode($response,true);
+					try {
+						$response = @file_get_contents($url);
+					} catch(Exception $e){}
+											$jsonobj=json_decode($response,true);
+
 					return $jsonobj;
 				}
 																	
