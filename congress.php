@@ -125,10 +125,12 @@
 		[id$=selection] {
 			text-align: center;
 		}
+		
 		#form-block {
 			display: inline-block;
 			border: 1px solid black;
 		}
+		
 		#fcontainer div {
 			padding: 5px;
 		}
@@ -137,9 +139,14 @@
 			padding-bottom: 30px;
 		}
 		
+		table {
+			border-collapse: collapse;
+		}
+		
 		#infoTable td {
 			padding: 0px 50px;
 		}
+		
 		.detail {
 			text-align: center;
 			width: 900px;
@@ -147,15 +154,19 @@
 			padding: 20px;
 			border: 1px solid;
 		}
+		
 		.detail td {
 			min-width: 200px;
 		}
+		
 		.bill td {
 			padding: 0px 50px;
 		}
+		
 		#details-show {
 			text-align: center;
 		}
+		
 	</style>
 	
 	
@@ -289,7 +300,7 @@
 							}
 							
 							$details = $details."<div class='detail' style='display: none;' id='".$value["first_name"]."_".$value["last_name"]."'>";
-							$details = $details."<img src='https://theunitedstates.io/images/congress/225x275/".$value["bioguide_id"].".jpg'>";
+							$details = $details."<img style='padding-bottom: 30px;' src='https://theunitedstates.io/images/congress/225x275/".$value["bioguide_id"].".jpg'>";
 							$details = $details."<table style='margin: 0 auto; padding-top: 30px;'><tbody><tr><td>Full Name</td><td>".$value["title"]." ".$name."</td></tr><tr><td>Term Ends on</td><td>".$value["term_end"]."</td></tr><tr><td>Website</td><td>".$website."</td></tr><tr><td>Office</td><td>".$value["office"]."</td></tr><tr><td>Facebook</td><td>".$fb."</td></tr><tr><td>Twitter</td><td>".$twitter."</td></tr></tbody></table></div>";
 							
 						}
