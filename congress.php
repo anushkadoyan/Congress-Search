@@ -53,7 +53,8 @@
 			keySelect.innerHTML = "Keyword*";
 			keyInput.value = "";
 
-
+			document.getElementById("senateRadio").checked = "true";
+			document.getElementById("houseRadio").checked = "false";
 		}
 		
 		function searchClicked() {
@@ -77,7 +78,6 @@
 				alert(text);
 			}
 			
-
 		}
 	</script>
 	<body>
@@ -98,8 +98,8 @@
 					<div id="chamber-selection">
 						<div style="display: inline-block;" id="chamber-title">Chamber</div>
 						<div id="sen_house-radios" style="display: inline-block">
-							<input type="radio" name="Senate_House" value = "Senate" <?php if($_POST['Senate_House']=="Senate") echo "checked='checked'"; ?> > Senate
-							<input type="radio" name="Senate_House" value = "House" <?php if($_POST['Senate_House']=="House") echo "checked='checked'"; ?>  >House <br>
+							<input type="radio" id="senateRadio" name="Senate_House" value = "Senate" <?php if(isset($_POST['Senate_House'])&&$_POST['Senate_House']=="Senate") echo "checked='checked'"; ?>checked="checked" > Senate
+							<input type="radio" id="houseRadio" name="Senate_House" value = "House" <?php if(isset($_POST['Senate_House'])&&$_POST['Senate_House']=="House") echo "checked='checked'"; ?>  >House <br>
 						</div>
 					</div>
 					<div id="keyword-selection">
