@@ -150,6 +150,9 @@
 		.detail td {
 			min-width: 200px;
 		}
+		.bill td {
+			padding: 0px 50px;
+		}
 		#details-show {
 			text-align: center;
 		}
@@ -294,10 +297,7 @@
 						echo $details;		
 						$text= $text."</tbody></table>";
 						echo $text;
-						?>				
 							
-						
-					<?php	
 					}
 					
 					//if Committees chosen
@@ -330,15 +330,53 @@
 					
 					//if Bills chosen
 					else if ($_POST['selectOption']=="Bills") {
-												
+						$state = strtolower($state);
+						$url = "http://congress.api.sunlightfoundation.com/bills?bill_id=".$state."&chamber=".$senateOrHouse."&apikey=".$apiKey;
+						$jsonobj = request($url);
+						$json = $jsonobj["results"];
+						
+	// 					print_r( $json);
+						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Bill ID</th><th>Short Title</th><th>Chamber</th><th>Details</th></tr>";
+						$details ="<div id='details-show'>";
+						if(!$json){
+							$details = $details."The API returned zero results for the request.</div>";
+							echo $details;
+							return;
+						}						
+						foreach ($json as $key => $value) {
+							
+							$text= $text. "<tr><td>".$value["bill_id"]."</td>";
+							$text= $text. "<td style='text-align: center;'>".$value["short_title"]."</td>";
+							$text= $text. "<td>".$value["chamber"]."</td>";
+							$text= $text. "<td><a onclick='return detailClick(\"".$value["bill_id"]."\")' href='".$value["bill_id"]."'>View Details</a></td></tr>";
+							$link ="";
+							
+							if(isset($value["last_version"]["urls"]["pdf"])) {
+								$link = "<a target='_blank' href='".$value["last_version"]["urls"]["pdf"]."'>".$value["short_title"]."</a>";
+							} else {	
+								$twitter = "N/A";
+							}
+														
+							$details = $details."<div class='detail bill' style='display: none;' id='".$value["bill_id"]."'>";
+							
+							$details = $details."<table style='margin: 0 auto;'><tbody><tr><td>Bill ID</td><td>".$value["bill_id"]."</td></tr><tr><td>Bill Title</td><td>".$value["short_title"]."</td></tr><tr><td>Sponsor</td><td>".$value["sponsor"]["title"]." ".$value["sponsor"]["first_name"]." ".$value["sponsor"]["last_name"]."</td></tr><tr><td>Introduced On</td><td>".$value["introduced_on"]."</td></tr><tr><td>Last action with date</td><td>".$value["last_version"]["version_name"].", ".$value["last_action_at"]."</td></tr><tr><td>Bill URL</td><td>".$link."</td></tr></tbody></table></div>";
+							
+						}
+						$details = $details."</div>";
+						echo $details;		
+						$text= $text."</tbody></table>";
+						echo $text;
+									
 					}
 					
 					//if Amendments chosen
 					else if ($_POST['selectOption']=="Amendments") {
+						
 						$state = strtolower($state);
 						$url = "http://congress.api.sunlightfoundation.com/amendments?amendment_id=".$state."&chamber=".$senateOrHouse."&apikey=".$apiKey;
 						$jsonobj = request($url);
 						$json = $jsonobj["results"];
+						
 						
 	// 					print_r( $json);
 						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Amendment ID</th><th>Amendment Type</th><th>Chamber</th><th>Introduced on</th></tr>";
