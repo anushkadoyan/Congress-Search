@@ -234,14 +234,11 @@
 							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&state=".$state."&apikey=".$apiKey;
 						} 
 						else if ($nameLength>1) {
-							echo "jfkhjgf";
 							$lastName = ucfirst(strtolower($name[1]));
 							if(substr($lastName, 0, 2)=="Mc") {
 								$lastName[2] = strtoupper($lastName[2]);
-								echo $lastName[2];
 							}
 							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&first_name=".ucfirst(strtolower($name[0]))."&last_name=".$lastName."&apikey=9d713eee2bda4febb053035ef76e5f4c";
-							echo $url;
 						}
 						else {
 							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&query=".$state."&apikey=".$apiKey;
