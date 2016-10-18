@@ -57,11 +57,12 @@
 		}
 		
 		function searchClicked() {
+			var table = document.getElementById("infoTable");
 			var opt = document.getElementById("con-select");
 
 			var keyInput = document.getElementById("keyword-input").value;
 			
-
+// 			table.innerHTML = "";
 			if(opt.value=="default" || !keyInput) {
 				var text = "Please enter the following missing information: ";
 				if(opt.value=="default" ) {
@@ -224,14 +225,18 @@
 					$name = explode(" ", $state);
 					$nameLength = count($name);
 					$lastName="";
+					
+					
+					//if Legislators chosen
 					if($_POST['selectOption']=="Legislators") {
 						
 						//all states
 						$states = array( 'Alabama'=>'AL', 'Alaska'=>'AK', 'Arizona'=>'AZ', 'Arkansas'=>'AR', 'California'=>'CA', 'Colorado'=>'CO', 'Connecticut'=>'CT', 'Delaware'=>'DE', 'Florida'=>'FL', 'Georgia'=>'GA', 'Hawaii'=>'HI', 'Idaho'=>'ID', 'Illinois'=>'IL', 'Indiana'=>'IN', 'Iowa'=>'IA', 'Kansas'=>'KS', 'Kentucky'=>'KY', 'Louisiana'=>'LA', 'Maine'=>'ME', 'Maryland'=>'MD', 'Massachusetts'=>'MA', 'Michigan'=>'MI', 'Minnesota'=>'MN', 'Mississippi'=>'MS', 'Missouri'=>'MO', 'Montana'=>'MT', 'Nebraska'=>'NE', 'Nevada'=>'NV', 'New Hampshire'=>'NH', 'New Jersey'=>'NJ', 'New Mexico'=>'NM', 'New York'=>'NY', 'North Carolina'=>'NC', 'North Dakota'=>'ND', 'Ohio'=>'OH', 'Oklahoma'=>'OK', 'Oregon'=>'OR', 'Pennsylvania'=>'PA', 'Rhode Island'=>'RI', 'South Carolina'=>'SC', 'South Dakota'=>'SD', 'Tennessee'=>'TN', 'Texas'=>'TX', 'Utah'=>'UT', 'Vermont'=>'VT', 'Virginia'=>'VA', 'Washington'=>'WA', 'West Virginia'=>'WV', 'Wisconsin'=>'WI', 'Wyoming'=>'WY' );
 						//if searched state is full state name instead of two letter
-						if (array_key_exists(ucfirst(strtolower($state)), $states)) {
-						    $state= $states[ucfirst(strtolower($state))];
+						if (array_key_exists(ucwords(strtolower($state)), $states)) {
+						    $state= $states[ucwords(strtolower($state))];
 							$url = "http://congress.api.sunlightfoundation.com/legislators?chamber=".$senateOrHouse."&state=".$state."&apikey=".$apiKey;
+							echo $url;
 						} 
 						else if ($nameLength>1) {
 							$lastName = ucfirst(strtolower($name[1]));
@@ -262,7 +267,6 @@
 							$text= $text. "<td style='text-align: center;'>".$value["state_name"]."</td>";
 							$text= $text. "<td>".$value["chamber"]."</td>";
 							$text= $text. "<td><a onclick='return detailClick(\"".$value["first_name"]."_".$value["last_name"]."\")' href='".$value["bioguide_id"]."'>View Details</a></td></tr>";
-							echo #$
 							$twitter ="";
 							$fb = "";
 							$website="";
@@ -296,12 +300,36 @@
 						
 					<?php	
 					}
+					
+					//if Committees chosen
 					else if ($_POST['selectOption']=="Committees") {
+						$url = "http://congress.api.sunlightfoundation.com/committees?committee_id=".$state."chamber=".$senateOrHouse."&apikey=".$apiKey;
+						$jsonobj = request($url);
+						$json = $jsonobj["results"];
+						
+	// 					print_r( $json);
+						$text = "<table id='infoTable' border='1' style='margin: auto;'><tbody><tr><th>Name</th><th>State</th><th>Chamber</th><th>Details</th></tr>";
+						$details ="<div id='details-show'>";
+						if(!$json){
+							$details = $details. "The API returned zero results for the request.</div>";
+							echo $details;
+							return;
+
+						}
+// 						foreach ($json as $key => $value) {
+							
+						
+						
 						
 					}
+					
+					
+					//if Bills chosen
 					else if ($_POST['selectOption']=="Bills") {
 						
 					}
+					
+					//if Amendments chosen
 					else if ($_POST['selectOption']=="Amendments") {
 						
 					}
@@ -329,7 +357,7 @@ YOUR_API_KEY_HERE
 					try {
 						$response = @file_get_contents($url);
 					} catch(Exception $e){}
-											$jsonobj=json_decode($response,true);
+					$jsonobj=json_decode($response,true);
 
 					return $jsonobj;
 				}
