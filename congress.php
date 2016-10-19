@@ -321,6 +321,28 @@
 							$twitter ="";
 							$fb = "";
 							$website="";
+							$office = "";
+							$termEnd = "";
+							$title = "";
+							
+							
+							if(!isset($value["title"])) {
+								$title = "";
+							} else {
+								$title = $value["title"];
+							}
+							
+							if(!isset($value["term_end"])) {
+								$termEnd = "";
+							} else {
+								$termEnd = $value["term_end"];
+							}
+							
+							if(!isset($value["office"])) {
+								$office = "";
+							} else {
+								$office = $value["office"];
+							}
 							if(isset($value["twitter_id"])) {
 								$twitter = "<a target='_blank' href='https://twitter.com/".$value["twitter_id"]."'>".$name."</a>";
 							} else {	
@@ -339,7 +361,7 @@
 							
 							$details = $details."<div class='detail' style='display: none;' id='".$value["first_name"]."_".$value["last_name"]."'>";
 							$details = $details."<img style='padding-bottom: 30px;' src='https://theunitedstates.io/images/congress/225x275/".$value["bioguide_id"].".jpg'>";
-							$details = $details."<table style='margin: 0 auto; padding-top: 30px;'><tbody><tr><td>Full Name</td><td>".$value["title"]." ".$name."</td></tr><tr><td>Term Ends on</td><td>".$value["term_end"]."</td></tr><tr><td>Website</td><td>".$website."</td></tr><tr><td>Office</td><td>".$value["office"]."</td></tr><tr><td>Facebook</td><td>".$fb."</td></tr><tr><td>Twitter</td><td>".$twitter."</td></tr></tbody></table></div>";
+							$details = $details."<table style='margin: 0 auto; padding-top: 30px;'><tbody><tr><td>Full Name</td><td>".$title." ".$name."</td></tr><tr><td>Term Ends on</td><td>".$termEnd."</td></tr><tr><td>Website</td><td>".$website."</td></tr><tr><td>Office</td><td>".$office."</td></tr><tr><td>Facebook</td><td>".$fb."</td></tr><tr><td>Twitter</td><td>".$twitter."</td></tr></tbody></table></div>";
 							
 						}
 						$details = $details."</div>";
@@ -395,12 +417,59 @@
 						foreach ($json as $key => $value) {
 							$title = "";
 							$linkText="";
-							$title=$value["short_title"];
-							$linkText = $value["short_title"];
+							$lastAction="";
+							$lastActionDate="";
+							$introducedOn="";
+							$sponsorTitle="";
+							$sponsorFirstName="";
+							$sponsorLastName="";
+							
+							
+							if(!isset($value["last_version"]["version_name"])) {
+								$lastAction = "N/A";
+							} else {
+								$lastAction = $value["last_version"]["version_name"];
+							}
+							if(!isset($value["last_action_at"])) {
+								$lastActionDate = "N/A";
+							} else {
+								$lastActionDate = $value["last_action_at"];
+							}
+							
+							if(!isset($value["introduced_on"])) {
+								$introducedOn = "N/A";
+							} else {
+								$introducedOn = $value["introduced_on"];
+							}
+							
+							if(!isset($value["sponsor"]["title"])) {
+								$sponsorTitle = "";
+							} else {
+								$sponsorTitle = $value["sponsor"]["title"];
+							}
+							
+							if(!isset($value["sponsor"]["first_name"])) {
+								$sponsorFirstName = "";
+							} else {
+								$sponsorFirstName = $value["sponsor"]["first_name"];
+							}
+							
+							if(!isset($value["sponsor"]["last_name"])) {
+								$sponsorLastName = "";
+							} else {
+								$sponsorLastName = $value["sponsor"]["last_name"];
+							}
+							
+							
 							if(!isset($value["short_title"])) {
 								$title = "N/A";
 								$linkText= $value["bill_id"];
+							} else {
+								$title=$value["short_title"];
+							$linkText = $value["short_title"];
 							}
+							
+							
 							$text= $text. "<tr><td>".$value["bill_id"]."</td>";
 							$text= $text. "<td style='text-align: center;'>".$title."</td>";
 							$text= $text. "<td>".$value["chamber"]."</td>";
@@ -415,7 +484,7 @@
 														
 							$details = $details."<div class='detail bill' style='display: none;' id='".$value["bill_id"]."'>";
 							
-							$details = $details."<table style='margin: 0 auto;'><tbody><tr><td>Bill ID</td><td>".$value["bill_id"]."</td></tr><tr><td>Bill Title</td><td>".$title."</td></tr><tr><td>Sponsor</td><td>".$value["sponsor"]["title"]." ".$value["sponsor"]["first_name"]." ".$value["sponsor"]["last_name"]."</td></tr><tr><td>Introduced On</td><td>".$value["introduced_on"]."</td></tr><tr><td>Last action with date</td><td>".$value["last_version"]["version_name"].", ".$value["last_action_at"]."</td></tr><tr><td>Bill URL</td><td>".$link."</td></tr></tbody></table></div>";
+							$details = $details."<table style='margin: 0 auto;'><tbody><tr><td>Bill ID</td><td>".$value["bill_id"]."</td></tr><tr><td>Bill Title</td><td>".$title."</td></tr><tr><td>Sponsor</td><td>".$sponsorTitle." ".$sponsorFirstName." ".$sponsorLastName."</td></tr><tr><td>Introduced On</td><td>".$introducedOn."</td></tr><tr><td>Last action with date</td><td>".$lastAction.", ".$lastActionDate."</td></tr><tr><td>Bill URL</td><td>".$link."</td></tr></tbody></table></div>";
 							
 						}
 						$details = $details."</div>";
